@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Title</title>
+    <style>
+        #selector {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        #selector + label {
+            font-size: 1em;
+            font-weight: 700;
+            color: white;
+            background-color: #007bff;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #selector:focus + label,
+        #selector + label:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #selector + label {
+            cursor: pointer;
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-gap: 10px;
+            padding: 10px;
+        }
+
+        #container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        #selector-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in-image {
+            animation: fadeIn 0.5s ease-in-out forwards;;
+            opacity: 0;
+        }
+    </style>
+    <script src="pkg/PhotoReader.js"></script>
+    <script>
+        wasm_bindgen('./pkg/PhotoReader_bg.wasm').then(function() {});
+        function makeThumbnail(inputElement) {
+            wasm_bindgen.get_thumbnail(inputElement, function(data) {
+                var container = document.getElementById('container');
+                let img = new Image();
+                img.onload = function() {
+                    container.appendChild(img);
+                };
+                img.className = 'fade-in-image';
+                img.src = data;
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="selector-container">
+        <input id="selector" type="file" onchange="makeThumbnail(this)" multiple accept="image/jpeg" />
+        <label for="selector">Scegli le foto</label>
+    </div>
+    <div id="container"></div>
+</body>
+</html>
