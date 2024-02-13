@@ -73,16 +73,20 @@
     <script src="pkg/PhotoReader.js"></script>
     <script>
         wasm_bindgen('./pkg/PhotoReader_bg.wasm').then(function() {});
-        function makeThumbnail(inputElement) {
-            wasm_bindgen.get_thumbnail(inputElement, function(data) {
-                var container = document.getElementById('container');
+        async function makeThumbnail(inputElement) {
+            var container = document.getElementById('container');
+            var files = inputElement.files;
+            for (var i=0, l=files.length; i<l; i++) {
+                let thumbData = await wasm_bindgen.get_thumbnail(files[i]);
+                const url = URL.createObjectURL(thumbData);
                 let img = new Image();
                 img.onload = function() {
                     container.appendChild(img);
+                    URL.revokeObjectURL(url);
                 };
                 img.className = 'fade-in-image';
-                img.src = data;
-            });
+                img.src = url;
+            }
         }
     </script>
 </head>
