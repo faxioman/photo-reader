@@ -70,9 +70,9 @@
             opacity: 0;
         }
     </style>
-    <script src="pkg/PhotoReader.js"></script>
+    <script src="pkg/photo_reader.js"></script>
     <script>
-        wasm_bindgen('./pkg/PhotoReader_bg.wasm').then(function() {});
+        wasm_bindgen('./pkg/photo_reader_bg.wasm').then(function() {});
         async function makeThumbnail(inputElement) {
             var container = document.getElementById('container');
             var files = inputElement.files;

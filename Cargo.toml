@@ -1,5 +1,5 @@
 [package]
-name = "PhotoReader"
+name = "photo_reader"
 version = "0.1.0"
 authors = ["Fabio Masini <fabio@rapidosoft.it>"]
 edition = "2018"
